@@ -82,3 +82,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tickets = await fetchTickets();
     displayTickets(tickets);
 });
+
+// Task 4 Use finally to Ensure Cleanup
+
+const loadingIndicator = document.createElement('div');
+loadingIndicator.id = 'loadingIndicator';
+loadingIndicator.textContent = 'Loading...';
+document.querySelector('.container').insertBefore(loadingIndicator, errorMessage);
+
+document.head.insertAdjacentHTML('beforeend', `
+    <style>
+        #loadingIndicator {
+            text-align: center;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+`);
+
+const setLoading = (isLoading) => {
+    loadingIndicator.style.display = isLoading ? 'block' : 'none';
+};
+
+const fetchAndDisplayTickets = async () => {
+    try {
+        setLoading(true);
+        const tickets = await fetchTickets();
+        displayTickets(tickets);
+    } catch (error) {
+        ticketContainer.innerHTML = '';
+        showError(error.message);
+    } finally {
+        setLoading(false);
+    }
+};
+
+document.addEventListener('DOMContentLoaded', fetchAndDisplayTickets);
