@@ -40,3 +40,45 @@ const fetchTickets = async () => {
     }
 };
 
+
+const createTicketHTML = (ticket) => {
+    return `
+        <div class="ticket">
+            <div class="ticket-header">
+                <h3>Ticket #${ticket.id}</h3>
+                <div>Customer ID: ${ticket.userId}</div>
+            </div>
+            <div class="ticket-content">
+                <h4>${ticket.title}</h4>
+                <p>${ticket.body}</p>
+            </div>
+        </div>
+    `;
+};
+
+// Task 3 Display Tickets Dynamically on the Page
+
+const displayTickets = (tickets) => {
+    const ticketsHTML = tickets.map(ticket => createTicketHTML(ticket)).join('');
+    ticketContainer.innerHTML = ticketsHTML;
+};
+
+document.head.insertAdjacentHTML('beforeend', `
+    <style>
+        .ticket {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .ticket-header {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+    </style>
+`);
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const tickets = await fetchTickets();
+    displayTickets(tickets);
+});
